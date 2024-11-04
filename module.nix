@@ -84,7 +84,7 @@ in {
         ExecStart = pkgs.writeScript "${nsName}-ns-isolation" ''
           #!${pkgs.bash}/bin/bash
             set -e
-            export PATH=${pkgs.iproute}/bin:${pkgs.wireguard-tools}/bin:${pkgs.nettools}/bin:${pkgs.iptables}/bin:$PATH
+            export PATH=${pkgs.iproute2}/bin:${pkgs.wireguard-tools}/bin:${pkgs.nettools}/bin:${pkgs.iptables}/bin:$PATH
             ip netns add ${nsName}
             ip netns exec ${nsName} ip link set dev lo up
             ip link add ${nsName}-wg0 type wireguard
@@ -109,7 +109,7 @@ in {
         ExecStop = pkgs.writeScript "${nsName}-ns-isolation-stop" ''
           #!${pkgs.bash}/bin/bash
           set -e
-          export PATH=${pkgs.iproute}/bin:${pkgs.iptables}/bin:$PATH
+          export PATH=${pkgs.iproute2}/bin:${pkgs.iptables}/bin:$PATH
           ip netns delete ${nsName}
           # iptables -t nat -D PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 10.1.1.1:8080
           # iptables -t nat -D POSTROUTING -j MASQUERADE
@@ -128,7 +128,7 @@ in {
         ExecStart = pkgs.writeScript "namespace-${nsName}-failure" ''
           #!${pkgs.bash}/bin/bash
             set -e
-            export PATH=${pkgs.iproute}/bin:$PATH
+            export PATH=${pkgs.iproute2}/bin:$PATH
             ip netns delete ${nsName}
         '';
       };
